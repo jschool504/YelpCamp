@@ -1,4 +1,4 @@
-var Campground  = require("./models/campgrounds");
+var Campground  = require("./models/campground");
 var Comment		= require("./models/comment");
 var mongoose    = require("mongoose");
 
