@@ -13,21 +13,30 @@ router.get("/", function(request, response) {
 	});
 });
 
-router.post("/", function(request, response) {
+// CREATE
+
+router.post("/", isLoggedIn, function(request, response) {
 	var name = request.body.name;
 	var image = request.body.image;
 	var desc = request.body.description;
-	var newCampground = {name: name, image: image, description: desc};
+	var author = {
+		id: request.user._id,
+		username: request.user.username
+	};
+	var newCampground = {name: name, image: image, description: desc, author: author};
 	Campground.create(newCampground, function(error, newlyCreated) {
 		if (error) {
 			console.log(error);
 		} else {
-			response.redirect("campground");
+			response.redirect("/campgrounds");
 		}
 	});
 });
 
-router.get("/new", function(request, response) {
+
+// NEW
+
+router.get("/new", isLoggedIn, function(request, response) {
    response.render("campground/new");
 });
 
@@ -42,5 +51,15 @@ router.get("/:id", function(request, response) {
 		}
 	});
 });
+
+// MIDDLEWARE
+
+function isLoggedIn(request, response, next) {
+	if (request.isAuthenticated()) {
+		return next();
+	}
+	
+	response.redirect("/login");
+}
 
 module.exports = router;
