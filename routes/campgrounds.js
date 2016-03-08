@@ -2,6 +2,7 @@ var express     = require("express");
 var router      = express.Router();
 
 var Campground  = require("../models/campground.js");
+var middleware	= require("../middleware");
 
 router.get("/", function(request, response) {
 	Campground.find({}, function(error, allCampgrounds) {
@@ -15,7 +16,7 @@ router.get("/", function(request, response) {
 
 // CREATE
 
-router.post("/", isLoggedIn, function(request, response) {
+router.post("/", middleware.isLoggedIn, function(request, response) {
 	var name = request.body.name;
 	var image = request.body.image;
 	var desc = request.body.description;
@@ -36,7 +37,7 @@ router.post("/", isLoggedIn, function(request, response) {
 
 // NEW
 
-router.get("/new", isLoggedIn, function(request, response) {
+router.get("/new", middleware.isLoggedIn, function(request, response) {
    response.render("campground/new");
 });
 
@@ -54,22 +55,15 @@ router.get("/:id", function(request, response) {
 
 // EDIT
 
-router.get("/:id/edit", isLoggedIn, function(request, response) {
-	
+router.get("/:id/edit", middleware.checkCampgroundOwnership, function(request, response) {
 	Campground.findById(request.params.id, function(error, campground) {
-		if (error) {
-			response.redirect("/campgrounds");
-		} else if (campground.author.id != request.user.id) {
-			response.send("YOU CANT DO THAT");
-		} else {
-			response.render("campground/edit", {campground: campground});
-		}
+		response.render("campground/edit", {campground: campground});
 	});
 });
 
 // UPDATE
 
-router.put("/:id", isLoggedIn, function(request, response) {
+router.put("/:id", middleware.checkCampgroundOwnership, function(request, response) {
 	Campground.findByIdAndUpdate(request.params.id, request.body.campground, function(error, campground) {
 	    if (error) {
 	    	response.redirect("/campgrounds");
@@ -81,42 +75,10 @@ router.put("/:id", isLoggedIn, function(request, response) {
 
 // DESTROY
 
-router.delete("/:id", isLoggedIn, function(request, response) {
-	
-	Campground.findById(request.params.id, function(error, campground) {
-		if (error) {
-			response.redirect("/campgrounds");
-		} else if (campground.author.id.equals(request.user.id)) {
-			Campground.findByIdAndRemove(campground.id, function(error) {
-				response.redirect("/campgrounds");
-			});
-		}
+router.delete("/:id", middleware.checkCampgroundOwnership, function(request, response) {
+	Campground.findByIdAndRemove(request.params.id, function(error) {
+		response.redirect("/campgrounds");
 	});
 });
-
-// MIDDLEWARE
-
-function isLoggedIn(request, response, next) {
-	if (request.isAuthenticated()) {
-		return next();
-	}
-	
-	response.redirect("/login");
-}
-
-function cbeckCampgroundOwnership(request, response, next) {
-	Campground.findById(request.params.id, function(error, campground) {
-		if (error) {
-			response.redirect("/campgrounds");
-		} else {
-			//does own?
-			if (campground.author.id.equals(request.user._id)) {
-				response.render("campgrounds/edit", {campground: campground});
-			} else {
-				response.send("YOU DONT HAVE PERSMISSION TO DO THIS!!");
-			}
-		}
-	});
-}
 
 module.exports = router;
