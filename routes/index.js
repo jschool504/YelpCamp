@@ -30,6 +30,18 @@ router.post("/register", function(request, response) {
 	});
 });
 
+// GET USERS
+
+router.get("/users", isLoggedIn, function(request, response) {
+	User.find({}, function(error, users) {
+		if (error) {
+			console.log(error);
+		} else {
+			response.render("users", {users: users});
+		}
+	});
+});
+
 // LOGIN
 
 router.get("/login", function(request, response) {
@@ -49,5 +61,15 @@ router.get("/logout", function(request, response) {
 	request.logout();
 	response.redirect("/campgrounds");
 });
+
+// MIDDLEWARE
+
+function isLoggedIn(request, response, next) {
+	if (request.isAuthenticated() && request.user.username == "admin") {
+		return next();
+	}
+	
+	response.render("login");
+}
 
 module.exports = router;

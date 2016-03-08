@@ -13,3 +13,7 @@
 em {
     color: gray;
 }
+
+#delete-form {
+    display: inline;
+}

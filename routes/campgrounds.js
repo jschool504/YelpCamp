@@ -52,6 +52,48 @@ router.get("/:id", function(request, response) {
 	});
 });
 
+// EDIT
+
+router.get("/:id/edit", isLoggedIn, function(request, response) {
+	
+	Campground.findById(request.params.id, function(error, campground) {
+		if (error) {
+			response.redirect("/campgrounds");
+		} else if (campground.author.id != request.user.id) {
+			response.send("YOU CANT DO THAT");
+		} else {
+			response.render("campground/edit", {campground: campground});
+		}
+	});
+});
+
+// UPDATE
+
+router.put("/:id", isLoggedIn, function(request, response) {
+	Campground.findByIdAndUpdate(request.params.id, request.body.campground, function(error, campground) {
+	    if (error) {
+	    	response.redirect("/campgrounds");
+	    } else {
+	    	response.redirect("/campgrounds/" + campground.id);
+	    }
+	});
+});
+
+// DESTROY
+
+router.delete("/:id", isLoggedIn, function(request, response) {
+	
+	Campground.findById(request.params.id, function(error, campground) {
+		if (error) {
+			response.redirect("/campgrounds");
+		} else if (campground.author.id.equals(request.user.id)) {
+			Campground.findByIdAndRemove(campground.id, function(error) {
+				response.redirect("/campgrounds");
+			});
+		}
+	});
+});
+
 // MIDDLEWARE
 
 function isLoggedIn(request, response, next) {
@@ -60,6 +102,21 @@ function isLoggedIn(request, response, next) {
 	}
 	
 	response.redirect("/login");
+}
+
+function cbeckCampgroundOwnership(request, response, next) {
+	Campground.findById(request.params.id, function(error, campground) {
+		if (error) {
+			response.redirect("/campgrounds");
+		} else {
+			//does own?
+			if (campground.author.id.equals(request.user._id)) {
+				response.render("campgrounds/edit", {campground: campground});
+			} else {
+				response.send("YOU DONT HAVE PERSMISSION TO DO THIS!!");
+			}
+		}
+	});
 }
 
 module.exports = router;
