@@ -4,6 +4,8 @@ var router      = express.Router();
 var passport    = require("passport");
 var User        = require("../models/user");
 
+var middleware	= require("../middleware");
+
 // ROOT ROUTE
 
 router.get("/", function(request, response) {
@@ -25,6 +27,7 @@ router.post("/register", function(request, response) {
 		}
 		
 		passport.authenticate("local")(request, response, function() {
+			request.flash("success", "Thanks for signing up! Happy Camping :D");
 			response.redirect("/campgrounds");
 		});
 	});
@@ -32,7 +35,7 @@ router.post("/register", function(request, response) {
 
 // GET USERS
 
-router.get("/users", isLoggedIn, function(request, response) {
+router.get("/users", middleware.isLoggedIn, function(request, response) {
 	User.find({}, function(error, users) {
 		if (error) {
 			console.log(error);
@@ -52,24 +55,15 @@ router.post("/login", passport.authenticate("local", {
 	successRedirect: "/campgrounds",
 	failureRedirect: "/login"
 }), function(request, response) {
-    
+	
 });
 
 // LOGOUT
 
 router.get("/logout", function(request, response) {
 	request.logout();
+	request.flash("success", "You've been logged out!");
 	response.redirect("/campgrounds");
 });
-
-// MIDDLEWARE
-
-function isLoggedIn(request, response, next) {
-	if (request.isAuthenticated() && request.user.username == "admin") {
-		return next();
-	}
-	
-	response.render("login");
-}
 
 module.exports = router;

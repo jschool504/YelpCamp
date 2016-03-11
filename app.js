@@ -11,6 +11,7 @@ var passport			= require("passport");
 var LocalStrategy		= require("passport-local");
 var User				= require("./models/user");
 var methodOverride		= require("method-override");
+var flash				= require("connect-flash");
 
 // ROUTE REQUIRES
 
@@ -23,7 +24,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
-//seedDB(); // seed the database
+app.use(flash());
+seedDB(); // seed the database
 
 // PASSPORT CONFIG
 
@@ -41,6 +43,8 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use(function(request, response, next) {
 	response.locals.currentUser = request.user;
+	response.locals.error = request.flash("error");
+	response.locals.success = request.flash("success");
 	next();
 });
 

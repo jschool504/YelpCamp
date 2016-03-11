@@ -9,7 +9,7 @@ middlewareObj.isLoggedIn = function(request, response, next) {
     if (request.isAuthenticated()) {
 		return next();
 	}
-	
+	request.flash("error", "Please login!");
 	response.redirect("/login");
 }
 
@@ -27,6 +27,7 @@ middlewareObj.checkCampgroundOwnership = function(request, response, next) {
 			}
 		});
 	} else {
+	    request.flash("error", "Please login as the owner of this campground!");
 		response.redirect("/login");
 	}
 }
@@ -45,6 +46,7 @@ middlewareObj.checkCommentOwnership = function(request, response, next) {
             }
         });
     } else {
+        request.flash("error", "Please login as the owner of this comment!");
         response.redirect("/login");
     }
 }
