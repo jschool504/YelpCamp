@@ -4,6 +4,8 @@ var User		= require("./models/user");
 var mongoose    = require("mongoose");
 var fs			= require("fs");
 
+var parsePhone		= require("./public/js/parsePhone");
+
 var data = [];
 
 function loadDB() {
@@ -32,13 +34,15 @@ function seedDB() {
 				var campsiteCounter = 1;
 				
 				for (var i = 0; i < 25; i++) {
-					var campsiteIndex = parseInt(Math.random() * (campsites.length - 25));
+					//var campsiteIndex = parseInt(Math.random() * (campsites.length - 25));
+					var campsiteIndex = i;
 					var campsite = campsites[campsiteIndex];
 					
 					campsite = campsite.split(",");
 					
 					var cmpgrnd = {
 						name: campsite[2],
+						phone: parsePhone(campsite[4]),
 						image: "http://lorempixel.com/" + parseInt(256 + (Math.random() * 100)) + "/" + parseInt(256 + (Math.random() * 100)) + "/nature/",
 						coords: {
 							lat: campsite[1],
