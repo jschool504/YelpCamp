@@ -30,8 +30,10 @@ function seedDB() {
 			} else {
 				
 				var campsiteCounter = 1;
-		
-				campsites.forEach(function(campsite) {
+				
+				for (var i = 0; i < 25; i++) {
+					var campsiteIndex = parseInt(Math.random() * (campsites.length - 25));
+					var campsite = campsites[campsiteIndex];
 					
 					campsite = campsite.split(",");
 					
@@ -42,6 +44,8 @@ function seedDB() {
 							lat: campsite[1],
 							long: campsite[0]
 						},
+						town: campsite[13],
+						state: campsite[10],
 						description: campsite[6],
 						author: {
 							id: adminUser._id,
@@ -58,8 +62,7 @@ function seedDB() {
 							campsiteCounter++;
 						}
 					});
-					
-				});
+				}
 			}
 		});
 	});

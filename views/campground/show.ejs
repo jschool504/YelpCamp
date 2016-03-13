@@ -12,11 +12,11 @@
 		</div>
 		<div class="col-md-9">
 			<div class="thumbnail">
-				<img class="img-responsive" src="<%= campground.image %>">
+				<iframe width="100%" height="500" framborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/search?key=AIzaSyDc0ladEPbc_Dnggjj6gHpB2JjVhEvLi18&zoom=7&q=<%= campground.name %><%= campground.town %><%= campground.state %>"></iframe>
 				<div class="caption-full">
 					<h4 class="pull-right">$9.00/night</h4>
 					<h4><a><%= campground.name %></a></h4>
-					<h5><%= campground.coords.lat %>, <%= campground.coords.long %></h5>
+					<p><strong>Location: </strong><%= campground.town %>, <%= campground.state %></p>
 					<p><%= campground.description %></p>
 					<p><em>Submitted by <%= campground.author.username %></em></p>
 					<% if (currentUser && campground.author.id.equals(currentUser.id)) { %>
