@@ -11,6 +11,7 @@ var campgroundSchema = new mongoose.Schema({
    town: String,
    state: String,
    description: String,
+   amenities: [String],
    author: {
 		id: {
 		   type: mongoose.Schema.Types.ObjectId,

@@ -40,10 +40,83 @@ function seedDB() {
 					
 					campsite = campsite.split(",");
 					
+					var amenitiesArray = campsite[9].split(" ");
+					amenitiesArray.pop();
+					
+					amenitiesArray.forEach(function(amenity, index) {
+						switch (amenity) {
+							case "NH":
+								amenitiesArray[index] = "No RV Hookups";
+								break;
+							case "E":
+								amenitiesArray[index] = "Electric Hookups";
+								break;
+							case "WE":
+								amenitiesArray[index] = "Water and Electric Hookups";
+								break;
+							case "WES":
+								amenitiesArray[index] = "Water, Electric, and Sewer Hookups";
+								break;
+							case "DP":
+								amenitiesArray[index] = "Sanitary Dump";
+								break;
+							case "ND":
+								amenitiesArray[index] = "No Dump";
+								break;
+							case "ft":
+								//placeholder for rv length
+								break;
+							case "FT":
+								amenitiesArray[index] = "Flushing Toilets";
+								break;
+							case "VT":
+								amenitiesArray[index] = "Vault Toilets";
+								break;
+							case "FTVT":
+								amenitiesArray[index] = "Flushing and Vault Toilets";
+								break;
+							case "PT":
+								amenitiesArray[index] = "Pit Toilets";
+								break;
+							case "NT":
+								amenitiesArray[index] = "No Toilets";
+								break;
+							case "DW":
+								amenitiesArray[index] = "Drinking Water";
+								break;
+							case "NW":
+								amenitiesArray[index] = "No Drinking Water";
+								break;
+							case "SH":
+								amenitiesArray[index] = "Showers";
+								break;
+							case "NS":
+								amenitiesArray[index] = "No Showers";
+								break;
+							case "RS":
+								amenitiesArray[index] = "Reservations";
+								break;
+							case "NR":
+								amenitiesArray[index] = "No Reservations";
+								break;
+							case "PA":
+								amenitiesArray[index] = "Pets Allowed";
+								break;
+							case "NP":
+								amenitiesArray[index] = "No Pets";
+								break;
+							case "L$":
+								amenitiesArray[index] = "<$12";
+								break;
+							default:
+								console.log("default switch case");
+						}
+					});
+					
 					var cmpgrnd = {
 						name: campsite[2],
 						phone: parsePhone(campsite[4]),
-						image: "http://lorempixel.com/" + parseInt(256 + (Math.random() * 100)) + "/" + parseInt(256 + (Math.random() * 100)) + "/nature/",
+						image: "/images/campsite.png",
 						coords: {
 							lat: campsite[1],
 							long: campsite[0]
@@ -51,6 +124,7 @@ function seedDB() {
 						town: campsite[13],
 						state: campsite[10],
 						description: campsite[6],
+						amenities: amenitiesArray,
 						author: {
 							id: adminUser._id,
 							username: adminUser.username
