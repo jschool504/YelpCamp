@@ -5,7 +5,7 @@ var Campground  = require("../models/campground.js");
 var middleware	= require("../middleware");
 
 router.get("/", function(request, response) {
-	Campground.find({}, function(error, allCampgrounds) {
+	Campground.find({}, null, {sort: "name"}, function(error, allCampgrounds) {
 		if (error) {
 			console.log(error);
 		} else {

@@ -1,0 +1,30 @@
+					<strong>Amenities: </strong>
+						<% if (campground.amenities.length > 1) { %>
+							<% for (var i = 0; i < campground.amenities.length; i++) { %>
+								<% switch (campground.amenities[i]) { 
+									case "NH": %>No RV Hookups<% break;
+									case "E": %><img id="amenityImg" src="/images/rvelectrichookups.png"><% break;
+									case "WE": %><img id="amenityImg" src="/images/rvwaterhookup.png"><img id="amenityImg" src="/images/rvelectrichookup.png"><% break;
+									case "WES": %><img id="amenityImg" src="/images/rvwaterhookup.png"><img id="amenityImg" src="/images/rvelectrichookup.png">Sewer Hookups<% break;
+									case "DP": %><img id="amenityImg" src="/images/sanidump.png"><% break;
+									case "ND": %><img id="amenityImg" src="/images/nosanidump.png"><% break;
+									case "FT": %><img id="amenityImg" src="/images/toilet.png"><% break;
+									case "VT": %>Vault Toilets<% break;
+									case "FTVT": %>Flushing and Vault Toilets<% break;
+									case "PT": %>Pit Toilets<% break;
+									case "NT": %><img id="amenityImg" src="/images/notoilet.png"><% break;
+									case "DW": %><img id="amenityImg" src="/images/faucet.png"><% break;
+									case "NW": %><img id="amenityImg" src="/images/nodrinkingwater.png"><% break;
+									case "SH": %><img id="amenityImg" src="/images/shower.jpg"><% break;
+									case "NS": %><img id="amenityImg" src="/images/noshowers.png"><% break;
+									case "RS": %><img id="amenityImg" src="/images/reservation.png"><% break;
+									case "NR": %><img id="amenityImg" src="/images/noreservations.png"><% break;
+									case "PA": %>Pets Allowed<% break;
+									case "NP": %>No Pets<% break;
+									case "L$": %><$12<% break;
+									default: %><%= campground.amenities[i] %><%
+								} %>
+							<% } %>
+						<% } else { %>
+							<%= campground.amenities[0] %>
+						<% } %>

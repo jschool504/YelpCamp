@@ -17,14 +17,7 @@
 					</h4>
 					<h4><a><%= campground.name %></a></h4>
 					<p><strong>Location: </strong><%= campground.town %>, <%= campground.state %></p>
-					<p><strong>Amentities: </strong>
-						<% if (campground.amenities.length > 1) { %>
-							<% for (var i = 0; i < campground.amenities.length; i++) { %>
-								<%= campground.amenities[i] %><% if (i < (campground.amenities.length - 1)) { %>, <% } %>
-							<% } %>
-						<% } else { %>
-							<%= campground.amenities[0] %>
-						<% } %>
+					<% include ../partials/amenities %>
 					<p><%= campground.description %></p>
 					<p><em>Submitted by <%= campground.author.username %></em></p>
 					<% if (currentUser && campground.author.id.equals(currentUser.id)) { %>

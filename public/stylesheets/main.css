@@ -27,3 +27,8 @@ em {
 #map {
     height: 500px;
 }
+
+#amenityImg {
+    width: 30px;
+    height: 30px;
+}

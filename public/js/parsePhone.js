@@ -1,6 +1,5 @@
 function parsePhone(phoneString) {
     
-    console.log(phoneString.length);
     var parsedPhoneArray = [];
     
     if (phoneString.length > 1) {
