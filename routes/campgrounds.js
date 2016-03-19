@@ -4,6 +4,8 @@ var router      = express.Router();
 var Campground  = require("../models/campground.js");
 var middleware	= require("../middleware");
 
+var parsePhone	= require("../public/js/parsePhone");
+
 router.get("/", function(request, response) {
 	Campground.find({}, null, {sort: "name"}, function(error, allCampgrounds) {
 		if (error) {
@@ -17,14 +19,18 @@ router.get("/", function(request, response) {
 // CREATE
 
 router.post("/", middleware.isLoggedIn, function(request, response) {
-	var name = request.body.name;
-	var image = request.body.image;
-	var desc = request.body.description;
 	var author = {
 		id: request.user._id,
 		username: request.user.username
 	};
-	var newCampground = {name: name, image: image, description: desc, author: author};
+	var newCampground = request.body.campground;
+	
+	if (newCampground.image.length == 0) {
+		newCampground.image = "/images/campsite.png";
+	}
+	
+	newCampground.author = author;
+	newCampground.phone = parsePhone(request.body.campground.phone);
 	Campground.create(newCampground, function(error, newlyCreated) {
 		if (error) {
 			console.log(error);
@@ -65,7 +71,12 @@ router.get("/:id/edit", middleware.checkCampgroundOwnership, function(request, r
 // UPDATE
 
 router.put("/:id", middleware.checkCampgroundOwnership, function(request, response) {
-	Campground.findByIdAndUpdate(request.params.id, request.body.campground, function(error, campground) {
+	
+	var newCampground = request.body.campground;
+	
+	newCampground.phone = parsePhone(request.body.campground.phone);
+	
+	Campground.findByIdAndUpdate(request.params.id, newCampground, function(error, campground) {
 	    if (error) {
 	    	response.redirect("/campgrounds");
 	    } else {

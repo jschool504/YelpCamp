@@ -3,7 +3,11 @@ var mongoose = require("mongoose");
 var campgroundSchema = new mongoose.Schema({
    name: String,
    phone: [String],
-   image: String,
+   image: {
+      type: String,
+      default: "/images/campsite.png"
+      
+   },
    coords: {
    	lat: Number,
    	long: Number

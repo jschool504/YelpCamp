@@ -14,7 +14,7 @@ function loadDB() {
 	return campsiteDataArray;
 }
 
-function seedDB() {
+function seedDB(num) {
 	var campsites = loadDB();
 	
 	Campground.remove({}, function(error) {
@@ -30,8 +30,10 @@ function seedDB() {
 			} else {
 				
 				var campsiteCounter = 1;
-				console.log(campsites.length);
-				for (var i = 0; i < campsites.length; i++) {
+				
+				if (num > campsites.length) { num = campsites.length };
+				
+				for (var i = 0; i < num; i++) {
 					//var campsiteIndex = parseInt(Math.random() * (campsites.length - 25));
 					var campsiteIndex = i;
 					var campsite = campsites[campsiteIndex];
