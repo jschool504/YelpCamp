@@ -1,5 +1,7 @@
 function parsePhone(phoneString) {
     
+    //phoneString = "(559) 877.2218/559-297-0706";
+    
     var parsedPhoneArray = [];
     
     if (phoneString.length > 1) {
@@ -20,41 +22,24 @@ function parsePhone(phoneString) {
         //phone numbers are delimited by /
         
         phoneArray.forEach(function(phoneNum) {
-            // convert phone number to correct format
             
-            if (phoneNum.charAt(0) != "(") {
-                
-                phoneNum = phoneNum.replace(/\s/, "");
-                var digitArray;
-                
-                if (phoneNum.split(".").length == 3) {
-                    
-                    // phone number looks like "000.000.0000"
-                    
-                    digitArray = phoneNum.split(".");
-                    
-                } else if (phoneNum.split("-").length == 3) {
-                    
-                    // phone number looks like "000-000-0000"
-                    
-                    digitArray = phoneNum.split("-");
-                    
-                }
-                
-                parsedPhoneArray.push("(" + digitArray[0] + ")" + " " + digitArray[1] + "-" + digitArray[2]);
-            } else {
-                
-                //phone number already in correct form, no processing needed
-                
-                parsedPhoneArray.push(phoneNum);
+            var phoneRegex = /\d{3,4}/g;
+            
+            var digitArray = [];
+            
+            for (var i = 0; i < 3; i++) {
+                // get all three parts of the phone number
+                digitArray.push(phoneRegex.exec(phoneNum));
             }
+            
+            parsedPhoneArray.push("(" + digitArray[0] + ")" + " " + digitArray[1] + "-" + digitArray[2]);
             
         });
         
     } else {
         parsedPhoneArray.push("");
     }
-    
+    //console.log(parsedPhoneArray);
     return parsedPhoneArray;
 }
 
