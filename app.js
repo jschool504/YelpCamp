@@ -56,6 +56,6 @@ app.use("/campgrounds/:id/comments", commentRoutes);
 
 // LISTENER
 
-app.listen(process.env.PORT, process.env.IP, function() {
+app.listen(80, "127.0.0.1", function() {
 	console.log("YelpCamp server is running...");
 });
